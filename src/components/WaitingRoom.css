@@ -1,0 +1,94 @@
+/* Player card styles */
+.player-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 2rem;
+}
+  
+.player-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 250px;
+  height: 150px;
+  margin: 1rem;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  background-color: #333;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.player-card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.player-name {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.ready-button,
+.not-ready-button,
+.ready-stamp,
+.not-ready-stamp {
+  display: inline-block;
+  width: 100px;
+  height: 40px;
+  line-height: 40px;
+  border-radius: 20px;
+  font-size: 1.25rem;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.ready-button {
+  background-color: green;
+  color: #222;
+}
+
+.ready-button:hover {
+  background-color: limegreen;
+  color: #222;
+}
+
+.not-ready-button {
+  background-color: red;
+  color: #ccc;
+}
+
+.not-ready-button:hover {
+  background-color: orangered;
+}
+
+.ready-stamp {
+  background-color: green;
+  color: #222;
+}
+
+.not-ready-stamp {
+  background-color: red;
+  color: #ccc;
+}
+
+.countdown {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 2px solid black;
+  font-size: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  color: cyan;
+  background-color: #333;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}

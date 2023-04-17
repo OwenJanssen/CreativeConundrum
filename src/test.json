@@ -1,0 +1,43 @@
+{
+    "elections" : {
+        "1316": {
+            "candidates": {
+                "Josh": {
+                    "vote count": 5,
+                    "positions": {
+                        "president": 0,
+                        "vice-president": 1
+                    }
+                }
+            }
+        }
+    }
+}
+
+{
+  code: 1316,
+  election_data {
+    position_1: {
+      title: president,
+      candidates: {
+        name1: votes: (int),
+        name2: votes: (int)
+      },
+      winner: NULL
+      //maybe extra stuff for tracking
+    }
+    position_2: {
+      title: vice president,
+      candidates: {
+        name1: votes: (int),
+        name2: votes: (int)
+      },
+      winner: NULL
+      //maybe extra stuff for tracking
+    }
+
+  }
+  ...
+  
+
+}

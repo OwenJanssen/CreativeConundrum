@@ -1,0 +1,87 @@
+input[type="text"]:focus {
+  outline: none;
+  border-color: #ff8c00;
+}
+
+.name {
+  margin-bottom: 7.5rem;
+  width: fit-content;
+  max-width: 400px;
+  z-index: 1;
+}
+
+.name input[type="text"] {
+  padding: 0.5rem;
+  width: 300px;
+  font-size: 1.25rem;
+  border-radius: 0.25rem;
+  background-color: transparent;
+  color: inherit;
+  border: 2px solid cyan;
+  transition: border-color 0.2s ease-in-out;
+}
+
+.new-game {
+  margin-bottom: 1.5rem;
+  width: 300px;
+  max-width: 400px;
+
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.25rem;
+  border: none;
+  background-color: cyan;
+  font-size: 1.25rem;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  color: #222;
+  z-index: 1;
+}
+
+.or-seperator {
+  margin-bottom: 1.5rem;
+  font-size: 1.25rem;
+  color: cyan;
+  z-index: 1;
+}
+
+.game-code {
+  margin-bottom: 1.5rem;
+  width: fit-content;
+  max-width: 400px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  z-index: 1;
+}
+
+.game-code input[type="text"] {
+  padding: 0.5rem;
+  width: 200px;
+  font-size: 1.25rem;
+  border-radius: 0.25rem 0rem 0rem 0.25rem;
+  background-color: transparent;
+  color: inherit;
+  border: 2px solid cyan;
+  transition: border-color 0.2s ease-in-out;
+}
+
+.game-code .join-game {
+  width: fit-content;
+  width: 100px;
+  text-align: center;
+
+  padding: 8px 0px;
+  border-radius: 0rem 0.25rem 0.25rem 0rem;
+  background-color: #ff8c00;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  color: #222;
+}
+
+.new-game:hover,
+.join-game:hover {
+  background-color: #fff;
+  color: #222;
+}
