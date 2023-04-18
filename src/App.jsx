@@ -4,7 +4,6 @@ import './App.css';
 import WordEnterPhase from './components/WordEnterPhase';
 import StoryWritingPhase from './components/StoryWritingPhase';
 import WordGuessingPhase from './components/WordGuessingPhase';
-import FunniestStoryVoting from './components/FunniestStoryVoting';
 import GameResults from './components/GameResults';
 import HomePage from './components/HomePage';
 import WaitingRoom from './components/WaitingRoom';
@@ -44,9 +43,11 @@ const FloatingLetter = ({ letter, size, color, x, y }) => {
 
 const App = () => {
   const [currentRound, setCurrentRound] = useState(0);
-  const [gameId, setGameId] = useState();
+  const [gameId, setGameId] = useState("");
   const [userId, setUserId] = useState(Math.floor(Math.random() * 1000000));
   const [letters, setLetters] = useState([]);
+  const [update, result] = useDbUpdate(`/`);
+  const [data, error] = useDbData('/');
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -61,6 +62,19 @@ const App = () => {
     return () => clearInterval(intervalId);
   }, []);
 
+  useEffect(() => {
+    if (!data || !data[gameId]) { return; }
+
+    setCurrentRound(data[gameId]["currentRound"]);
+  }, [data]);
+
+  const updateCurrentRound = (newRound) => {
+    setCurrentRound(newRound);
+    const gameData = { ...data[gameId] };
+    gameData["currentRound"] = newRound;
+    update({[`${gameId}`]: gameData});
+  }
+
   const addLetter = ({ x, y, letter, size, color }) => {
     setLetters(prevLetters => {
       if (prevLetters.length >= 50) {
@@ -70,14 +84,13 @@ const App = () => {
     });
   };
   
-  return <div>
-    {(currentRound == 0) && <HomePage setCurrentRound={setCurrentRound} gameId={gameId} setGameId={setGameId} userId={userId}/>}
-    {(currentRound == 1) && <WaitingRoom setCurrentRound={setCurrentRound} gameId={gameId} userId={userId}/>}
-    {(currentRound == 2) && <WordEnterPhase setCurrentRound={setCurrentRound} gameId={gameId} userId={userId}/>}
-    {(currentRound == 3) && <StoryWritingPhase setCurrentRound={setCurrentRound} gameId={gameId} userId={userId}/>}
-    {(currentRound == 4) && <WordGuessingPhase setCurrentRound={setCurrentRound} gameId={gameId} userId={userId}/>}
-    {(currentRound == 5) && <FunniestStoryVoting setCurrentRound={setCurrentRound} gameId={gameId} userId={userId}/>}
-    {(currentRound == 6) && <GameResults setCurrentRound={setCurrentRound} gameId={gameId} userId={userId}/>}
+  return <div className="app-container">
+    {(currentRound == 0) && <HomePage setCurrentRound={updateCurrentRound} gameId={gameId} setGameId={setGameId} userId={userId}/>}
+    {(currentRound == 1) && <WaitingRoom setCurrentRound={updateCurrentRound} gameId={gameId} userId={userId}/>}
+    {(currentRound == 2) && <WordEnterPhase setCurrentRound={updateCurrentRound} gameId={gameId} userId={userId}/>}
+    {(currentRound == 3) && <StoryWritingPhase setCurrentRound={updateCurrentRound} gameId={gameId} userId={userId}/>}
+    {(currentRound == 4) && <WordGuessingPhase setCurrentRound={updateCurrentRound} gameId={gameId} userId={userId}/>}
+    {(currentRound == 5) && <GameResults setCurrentRound={updateCurrentRound} gameId={gameId} userId={userId}/>}
     <div className="letters-container">
       {letters.map((letter, index) => (
         <FloatingLetter key={index} {...letter} />))

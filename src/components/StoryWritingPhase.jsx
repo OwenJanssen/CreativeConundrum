@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDbData, useDbUpdate } from '../utilities/firebase';
-import './StoryWritingPhase.css'
+import './StoryWritingPhase.css';
 
 const StoryWritingPhase = ({setCurrentRound, gameId, userId}) => {
     const [data, error] = useDbData(`/${gameId}`);
@@ -27,7 +27,7 @@ const StoryWritingPhase = ({setCurrentRound, gameId, userId}) => {
         textarea.style.height = 'auto';
         textarea.style.height = textarea.scrollHeight + 'px';
 
-        const numPlayers = Object.keys(data).length;
+        const numPlayers = Object.keys(data).length-1;
         const numReady = Object.keys(data).filter(key => data[key]["ready"]).length;
         const allPlayersReady = numPlayers === numReady;
 
@@ -53,8 +53,9 @@ const StoryWritingPhase = ({setCurrentRound, gameId, userId}) => {
     if (data === undefined) return <h1>Loading game data...</h1>;
     if (!data) return <h1>No game data found</h1>;
     
-    return <div className="app-container">
+    return <div className="story-writing">
         <div className="game-title">CreativeConundrum</div>
+        <div className="countdown">{timeRemaining}</div>
         <div className="story-section">
             <div className="story-header">Write A Story With These Words</div>
             <div className="word-section">
@@ -64,7 +65,6 @@ const StoryWritingPhase = ({setCurrentRound, gameId, userId}) => {
             </div>
             <textarea ref={textareaRef} value={data[userId]["story"]} onChange={handleStoryChange}/>
             <div className={data[userId]["ready"] ? "done-button" : "not-done-button"} onClick={handleDoneClick}>Done</div>
-            <div className="countdown">{timeRemaining}</div>
         </div>
     </div>
 };

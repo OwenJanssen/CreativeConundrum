@@ -1,34 +1,85 @@
-.enter-text {
+.word-enter {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #222;
+    color: cyan;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.word-enter .game-title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.word-enter .enter-text {
     font-size: 1.5rem;
     font-weight: bold;
     margin-bottom: 1.5rem;
 }
 
-.words {
+.word-enter .words {
     display: flex;
     flex-direction: column;
     margin-bottom: 1.5rem;
 }
 
-.word-enter-box {
+.word-enter .word-enter-box {
     width: 100%;
     padding: 0.5rem;
     font-size: 1rem;
     border: 2px solid #333;
     border-radius: 5px;
     margin-bottom: 1rem;
+    z-index: 2;
 }
 
-.submit-button {
-    background-color: #333;
+.word-enter .done-button,
+.word-enter .not-done-button {
     color: #fff;
     padding: 0.75rem 1.5rem;
     border-radius: 5px;
-    font-size: 1rem;
+    font-size: 1.5rem;
     cursor: pointer;
+    z-index: 4;
 }
 
-.submit-button:hover {
+.word-enter .done-button {
+    background-color: green;
+}
+
+.word-enter .not-done-button {
+    background-color: red;
+}
+
+.word-enter .done-button:hover,
+.word-enter .not-done-button:hover {
     background-color: #fff;
     color: #333;
+}
+
+.word-enter .countdown, 
+.word-enter .countdown-placeholder {
+  margin-bottom: 2rem;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  font-size: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  z-index: 4;
+}
+
+.word-enter .countdown {
+  border: 2px solid black;
+  color: cyan;
+  background-color: #333;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }

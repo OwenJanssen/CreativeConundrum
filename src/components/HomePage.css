@@ -1,16 +1,24 @@
-input[type="text"]:focus {
+.home-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.home-page input[type="text"]:focus {
   outline: none;
   border-color: #ff8c00;
 }
 
-.name {
+.home-page .name {
   margin-bottom: 7.5rem;
   width: fit-content;
   max-width: 400px;
+  background-color: #222;
   z-index: 1;
 }
 
-.name input[type="text"] {
+.home-page .name input[type="text"] {
   padding: 0.5rem;
   width: 300px;
   font-size: 1.25rem;
@@ -21,7 +29,7 @@ input[type="text"]:focus {
   transition: border-color 0.2s ease-in-out;
 }
 
-.new-game {
+.home-page .new-game {
   margin-bottom: 1.5rem;
   width: 300px;
   max-width: 400px;
@@ -38,14 +46,14 @@ input[type="text"]:focus {
   z-index: 1;
 }
 
-.or-seperator {
+.home-page .or-seperator {
   margin-bottom: 1.5rem;
   font-size: 1.25rem;
   color: cyan;
   z-index: 1;
 }
 
-.game-code {
+.home-page .game-code {
   margin-bottom: 1.5rem;
   width: fit-content;
   max-width: 400px;
@@ -55,7 +63,7 @@ input[type="text"]:focus {
   z-index: 1;
 }
 
-.game-code input[type="text"] {
+.home-page .game-code input[type="text"] {
   padding: 0.5rem;
   width: 200px;
   font-size: 1.25rem;
@@ -64,9 +72,10 @@ input[type="text"]:focus {
   color: inherit;
   border: 2px solid cyan;
   transition: border-color 0.2s ease-in-out;
+  background-color: #222;
 }
 
-.game-code .join-game {
+.home-page .game-code .join-game {
   width: fit-content;
   width: 100px;
   text-align: center;
@@ -80,8 +89,8 @@ input[type="text"]:focus {
   color: #222;
 }
 
-.new-game:hover,
-.join-game:hover {
+.home-page .new-game:hover,
+.home-page .join-game:hover {
   background-color: #fff;
   color: #222;
 }
