@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDbData, useDbUpdate } from '../utilities/firebase';
+import { nextRound } from '../utilities/nextRound';
 import './StoryWritingPhase.css';
 
-const StoryWritingPhase = ({setCurrentRound, gameId, userId}) => {
+const StoryWritingPhase = ({gameId, userId}) => {
     const [data, error] = useDbData(`/${gameId}`);
     const [update, result] = useDbUpdate(`/${gameId}`);
     const textareaRef = useRef(null);
-    const [timeRemaining, setTimeRemaining] = useState(60);
+    const [timerGoing, setTimerGoind] = useState(false);
 
     const handleStoryChange = (e) => {
         const gameData = { ...data[userId] };
@@ -27,27 +28,18 @@ const StoryWritingPhase = ({setCurrentRound, gameId, userId}) => {
         textarea.style.height = 'auto';
         textarea.style.height = textarea.scrollHeight + 'px';
 
-        const numPlayers = Object.keys(data).length-1;
         const numReady = Object.keys(data).filter(key => data[key]["ready"]).length;
-        const allPlayersReady = numPlayers === numReady;
 
-        if (allPlayersReady) {
-            setCurrentRound(4);
+        if (numReady>0 && !timerGoing) {
+            setTimerGoind(true);
+            if (data[userId]["leader"]) {
+                const gameData = { ...data["props"] };
+                gameData["timerStartTime"] = Date.now();
+                update({["props"]: gameData});
+                setTimeout(() => {nextRound(data, update)}, 60000);
+            }
         }
     }, [data]);
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setTimeRemaining(prevTime => prevTime - 1);
-        }, 1000);
-
-        if (timeRemaining === 0) {
-            clearInterval(interval);
-            setCurrentRound(4);
-        }
-
-        return () => clearInterval(interval);
-    }, [timeRemaining, setCurrentRound]);
 
     if (error) return <h1>Error game data: {error.toString()}</h1>;
     if (data === undefined) return <h1>Loading game data...</h1>;
@@ -55,7 +47,7 @@ const StoryWritingPhase = ({setCurrentRound, gameId, userId}) => {
     
     return <div className="story-writing">
         <div className="game-title">CreativeConundrum</div>
-        <div className="countdown">{timeRemaining}</div>
+        {timerGoing ? <div className="countdown">{Math.max(60-Math.floor((Date.now() - data["props"]["timerStartTime"])/1000),0)}</div> : <div className="countdown-placeholder"/>}
         <div className="story-section">
             <div className="story-header">Write A Story With These Words</div>
             <div className="word-section">

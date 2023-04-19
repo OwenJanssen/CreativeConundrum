@@ -46,13 +46,14 @@ const StoryCard = ({ text, id, userId, data, update, funniest, setFunniest, winn
         if (id==userId || e.target.tagName=="SPAN" || results) { return; }
 
         setFunniest(oldFunniest => {
-            console.log(oldFunniest)
-            if (oldFunniest.length == 0 || oldFunniest.map(a => `${a}`).includes(`${id}`)) { return [id]; }
+            if (oldFunniest.map(a => `${a}`).includes(`${id}`)) { return [id]; }
 
-            let gameData = { ...data[oldFunniest[0]] };
-            gameData["funnyVotes"]--;
-            update({[`${oldFunniest[0]}`]: gameData});
-            
+            if (oldFunniest.length > 0) { 
+                let gameData = { ...data[oldFunniest[0]] };
+                gameData["funnyVotes"]--;
+                update({[`${oldFunniest[0]}`]: gameData});
+            }
+
             gameData = { ...data[id] };
             gameData["funnyVotes"]++;
             update({[`${id}`]: gameData});
@@ -61,14 +62,12 @@ const StoryCard = ({ text, id, userId, data, update, funniest, setFunniest, winn
         });
     };
 
-    //console.log(data[userId]["givenWords"])
-
-    return <div key={id} className="story-card" onClick={updateFunniest}>
+    return <div key={id} className="story-card" style={{backgroundColor: (id==funniest && !results) ? "green" : ""}} onClick={updateFunniest}>
         <div className="author" key={id + "0"}>{id==userId ? `Your Story` : `${data[id]["name"]}'s Story${id==data[userId]["nextUserId"] ? ` (Your Words)` : ``}`}</div>
         {(results && funniest.map(a => `${a}`).includes(`${id}`)) && <div className="funniest">Funniest Story</div>}
         {(results && winner.map(a => `${a}`).includes(`${id}`)) && <div className="winner">Least Words Guessed</div>}
         <div className="story" key={id + "1"}>{renderText()}</div>
-        <div className="words-text">Words</div>
+        {results && <div className="words-text">Words</div>}
         {results && <div className="words-section">
             {data[id]["givenWords"].map((word, index) => {return <div key={index}>{word}</div>})}
         </div>}

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useDbData, useDbUpdate } from '../utilities/firebase';
 import StoryCard from './StoryCard';
 import './AllStories.css';
+import { nextRound } from '../utilities/nextRound';
 
 const WordGuessingPhase = ({setCurrentRound, gameId, userId}) => {
     const [update, result] = useDbUpdate(`/${gameId}`);
@@ -14,12 +15,6 @@ const WordGuessingPhase = ({setCurrentRound, gameId, userId}) => {
         update({[`${userId}`]: gameData});
     };
 
-    const resetReady = () => {
-        const gameData = { ...data[userId] };
-        gameData["ready"] = false;
-        update({[`${userId}`]: gameData});
-    }
-
     useEffect(() => {
         if (!data) { return; }
 
@@ -27,9 +22,8 @@ const WordGuessingPhase = ({setCurrentRound, gameId, userId}) => {
         const numReady = Object.keys(data).filter(key => data[key]["ready"]).length;
         const allPlayersReady = numPlayers === numReady;
 
-        if (allPlayersReady) {
-            resetReady();
-            setCurrentRound(5);
+        if (allPlayersReady && data[userId]["leader"]) {
+            nextRound(data, update);
         }
     }, [data]);
 
@@ -42,7 +36,7 @@ const WordGuessingPhase = ({setCurrentRound, gameId, userId}) => {
         <div className="instructions">Click on the three words that each story had to use</div>
         <div className="instructions">Click anywhere else on the card to vote for it as the funniest story</div>
         <div className="stories-section">
-            {Object.keys(data).filter(a=>a!="currentRound").map(key => {
+            {Object.keys(data).filter(a=>a!="props").map(key => {
                 return <StoryCard id={key} userId={userId} text={data[key]["story"]} data={data} update={update} funniest={funniest} setFunniest={setFunniest}/>
             })}
         </div>

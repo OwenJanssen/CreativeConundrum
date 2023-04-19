@@ -3,7 +3,7 @@ import { useDbData, useDbUpdate } from '../utilities/firebase';
 import StoryCard from './StoryCard';
 import './AllStories.css';
 
-const GameResults = ({setCurrentRound, gameId, userId}) => {
+const GameResults = ({gameId, userId}) => {
     const [data, error] = useDbData(`/${gameId}`);
     const [update, result] = useDbUpdate(`/${gameId}`);
     const [winner, setWinner] = useState([userId]);
@@ -40,8 +40,8 @@ const GameResults = ({setCurrentRound, gameId, userId}) => {
         <div className="game-title">CreativeConundrum</div>
         <div className="instructions">Results!</div>
         <div className="stories-section">
-            {Object.keys(data).filter(a=>a!="currentRound").map(key => {
-                return <StoryCard id={key} userId={userId} text={data[key]["story"]} data={data} update={update} funniest={funniest} setFunniest={setFunniest} winner={winner} results={true}/>
+            {Object.keys(data).filter(a=>a!="props").map(key => {
+                return <StoryCard id={key} userId={userId} text={data[key]["story"]} data={data} update={update} funniest={funniest} setFunniest={(setFunniest)} winner={winner} results={true}/>
             })}
         </div>
     </div>

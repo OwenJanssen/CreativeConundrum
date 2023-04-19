@@ -11,7 +11,10 @@ const HomePage = ({setCurrentRound, gameId, setGameId, userId}) => {
         const randomGameId = Math.floor(Math.random() * 9000) + 1000;
         update({
             [`${randomGameId}`]: {
-                "currentRound": 1,
+                "props": {
+                    "currentRound": 1,
+                    "timerStartTime": 0,
+                },
                 [`${userId}`]: {
                     "name": name,
                     "enteredWords": [
@@ -29,11 +32,11 @@ const HomePage = ({setCurrentRound, gameId, setGameId, userId}) => {
                     "funnyVotes": 0,
                     "ready": false,
                     "nextUserId": 0,
+                    "leader": true
                 }
             }
         });
         setGameId(randomGameId);
-        setCurrentRound(1);
     }
 
     const joinExistingGame = () => {
@@ -55,6 +58,7 @@ const HomePage = ({setCurrentRound, gameId, setGameId, userId}) => {
             "funnyVotes": 0,
             "ready": false,
             "nextUserId": 0,
+            "leader": false
         };
         update({
             [`${gameId}`]: gameData,

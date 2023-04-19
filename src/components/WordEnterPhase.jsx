@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useDbData, useDbUpdate } from '../utilities/firebase';
+import { nextRound } from '../utilities/nextRound';
 import './WordEnterPhase.css';
 
 const WordEnterPhase = ({setCurrentRound, gameId, userId}) => {
     const [data, error] = useDbData(`/${gameId}`);
     const [update, result] = useDbUpdate(`/${gameId}`);
     const [allReady, setAllReady] = useState(false);
-    const [countdown, setCountdown] = useState(0);
 
     const [word1, setWord1] = useState("");
     const [word2, setWord2] = useState("");
@@ -50,9 +50,8 @@ const WordEnterPhase = ({setCurrentRound, gameId, userId}) => {
     useEffect(() => {
         if (!data || nextUserId) { return; }
 
-        const keys = Object.keys(data).filter(a => a!="currentRound");
+        const keys = Object.keys(data).filter(a => a!="props");
         const index = keys.indexOf(`${userId}`);
-        console.log(keys, index, index !== -1, index < keys.length-1, keys.length > 1);
         
         let next = 0;
         if ((index !== -1 && index < keys.length-1) && keys.length > 1) {
@@ -68,12 +67,6 @@ const WordEnterPhase = ({setCurrentRound, gameId, userId}) => {
         setNextUserId(next);
     }, [data]);
 
-    const resetReady = () => {
-        const gameData = { ...data[userId] };
-        gameData["ready"] = false;
-        update({[`${userId}`]: gameData});
-    }
-
     useEffect(() => {
         if (!data) { return; }
 
@@ -83,21 +76,14 @@ const WordEnterPhase = ({setCurrentRound, gameId, userId}) => {
 
         if (allPlayersReady && !allReady) {
             setAllReady(true);
-            resetReady();
-            setCountdown(3);
+            if (data[userId]["leader"]) {
+                const gameData = { ...data["props"] };
+                gameData["timerStartTime"] = Date.now();
+                update({["props"]: gameData});
+                setTimeout(() => {nextRound(data, update)}, 3000);
+            }
         }
     }, [data, allReady]);
-
-    useEffect(() => {
-        if (!data) { return; }
-
-        if (allReady && countdown > 0) {
-            const timerId = setInterval(() => setCountdown(countdown - 1), 1000);
-            return () => clearInterval(timerId);
-        } else if (allReady && countdown === 0) {
-            setCurrentRound(3);
-        }
-    }, [allReady, countdown]);
 
     if (error) return <h1>Error game data: {error.toString()}</h1>;
     if (data === undefined) return <h1>Loading game data...</h1>;
@@ -105,7 +91,7 @@ const WordEnterPhase = ({setCurrentRound, gameId, userId}) => {
 
     return <div className="word-enter">
         <div className="game-title">CreativeConundrum</div>
-        {allReady ? <div className="countdown">{countdown}</div> : <div className="countdown-placeholder"/>}
+        {allReady ? <div className="countdown">{Math.max(3-Math.floor((Date.now() - data["props"]["timerStartTime"])/1000),0)}</div> : <div className="countdown-placeholder"/>}
         <div className="enter-text">Enter Three Words</div>
         <div className="words">
             <input type="text" className="word-enter-box" onChange={handleWord1Change} value={word1} placeholder="Word 1"/>

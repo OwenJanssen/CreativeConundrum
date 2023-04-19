@@ -63,17 +63,10 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    if (!data || !data[gameId]) { return; }
+    if (!data || !data[gameId] || !data[gameId][userId]) { return; }
 
-    setCurrentRound(data[gameId]["currentRound"]);
+    setCurrentRound(data[gameId]["props"]["currentRound"]);
   }, [data]);
-
-  const updateCurrentRound = (newRound) => {
-    setCurrentRound(newRound);
-    const gameData = { ...data[gameId] };
-    gameData["currentRound"] = newRound;
-    update({[`${gameId}`]: gameData});
-  }
 
   const addLetter = ({ x, y, letter, size, color }) => {
     setLetters(prevLetters => {
@@ -85,12 +78,12 @@ const App = () => {
   };
   
   return <div className="app-container">
-    {(currentRound == 0) && <HomePage setCurrentRound={updateCurrentRound} gameId={gameId} setGameId={setGameId} userId={userId}/>}
-    {(currentRound == 1) && <WaitingRoom setCurrentRound={updateCurrentRound} gameId={gameId} userId={userId}/>}
-    {(currentRound == 2) && <WordEnterPhase setCurrentRound={updateCurrentRound} gameId={gameId} userId={userId}/>}
-    {(currentRound == 3) && <StoryWritingPhase setCurrentRound={updateCurrentRound} gameId={gameId} userId={userId}/>}
-    {(currentRound == 4) && <WordGuessingPhase setCurrentRound={updateCurrentRound} gameId={gameId} userId={userId}/>}
-    {(currentRound == 5) && <GameResults setCurrentRound={updateCurrentRound} gameId={gameId} userId={userId}/>}
+    {(currentRound == 0) && <HomePage gameId={gameId} setGameId={setGameId} userId={userId}/>}
+    {(currentRound == 1) && <WaitingRoom gameId={gameId} userId={userId}/>}
+    {(currentRound == 2) && <WordEnterPhase gameId={gameId} userId={userId}/>}
+    {(currentRound == 3) && <StoryWritingPhase gameId={gameId} userId={userId}/>}
+    {(currentRound == 4) && <WordGuessingPhase gameId={gameId} userId={userId}/>}
+    {(currentRound == 5) && <GameResults gameId={gameId} userId={userId}/>}
     <div className="letters-container">
       {letters.map((letter, index) => (
         <FloatingLetter key={index} {...letter} />))
